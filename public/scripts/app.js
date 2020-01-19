@@ -1,106 +1,53 @@
 'use strict';
 
-console.log('this is app.js');
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-// JSX - JavaScript XML
-var app = {
-    title: 'Indecision App',
-    subtitle: 'This is cool yes?',
-    options: []
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function getOptions(options) {
-    if (options.length > 0) {
-        return React.createElement(
-            'p',
-            null,
-            'Here are your options:'
-        );
-    } else {
-        return React.createElement(
-            'p',
-            null,
-            'No Options'
-        );
+var Person = function () {
+    function Person() {
+        var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Anonymous';
+        var age = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+        _classCallCheck(this, Person);
+
+        this.name = name;
+        this.age = age;
     }
-}
 
-function onFormSubmit(e) {
-    e.preventDefault();
+    _createClass(Person, [{
+        key: 'getGreeting',
+        value: function getGreeting() {
+            return 'Hi ' + this.name + '!';
+        }
+    }, {
+        key: 'getDescription',
+        value: function getDescription() {
+            return this.name + ' is ' + this.age + ' year(s) old';
+        }
+    }]);
 
-    var option = e.target.elements.option.value;
+    return Person;
+}();
 
-    if (option) {
-        app.options.push(option);
-        e.target.elements.option.value = '';
-        console.log('Options Array Length: ', app.options.length);
-        render();
-    }
-}
+var me = new Person('Mikael Evangelista', 22);
+console.log(me.getGreeting());
 
-function clearOptions() {
-    app.options = [];
-    render();
-    console.log('Options Array Length: ', app.options.length);
-}
-
-function onMakeDecision() {
-    var numberOfOptions = app.options.length;
-    var randomNum = Math.floor(Math.random() * numberOfOptions);
-    var option = app.options[randomNum];
-
-    alert(option);
-}
+var anon = new Person();
 
 var appRoot = document.querySelector('#app');
-function render() {
-    var template = React.createElement(
-        'div',
+var greetingTemplate = React.createElement(
+    'div',
+    null,
+    React.createElement(
+        'h2',
         null,
-        React.createElement(
-            'h1',
-            null,
-            app.title
-        ),
-        app.subtitle && React.createElement(
-            'p',
-            null,
-            app.subtitle
-        ),
-        getOptions(app.options),
-        React.createElement(
-            'button',
-            { disabled: app.options.length < 1, onClick: onMakeDecision },
-            'What should I do?'
-        ),
-        React.createElement(
-            'button',
-            { onClick: clearOptions },
-            'Remove All'
-        ),
-        React.createElement(
-            'ol',
-            null,
-            app.options.map(function (option) {
-                return React.createElement(
-                    'li',
-                    { key: option },
-                    option
-                );
-            })
-        ),
-        React.createElement(
-            'form',
-            { onSubmit: onFormSubmit },
-            React.createElement('input', { type: 'text', name: 'option' }),
-            React.createElement(
-                'button',
-                null,
-                'Add Option'
-            )
-        )
-    );
-    ReactDOM.render(template, appRoot);
-}
-
-render();
+        me.getDescription()
+    ),
+    React.createElement(
+        'h2',
+        null,
+        anon.getDescription()
+    )
+);
+ReactDOM.render(greetingTemplate, appRoot);
