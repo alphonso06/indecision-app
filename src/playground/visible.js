@@ -1,25 +1,40 @@
-let text
+class VisibilityToggle extends React.Component {
+    constructor (props) {
+        super(props)
+        this.handleToggleVisibility = this.handleToggleVisibility.bind(this)
 
-function toggle () {
-    if (!text) {
-        text = <p>These are some details, interesting stuff right?</p>
-        render()
-    } else {
-        text = null
-        render()
+        this.state = {
+            details: null
+        }
+    }
+
+    handleToggleVisibility() {
+        if (!this.state.details) {
+            this.setState(function (prevState) {
+                return {
+                    details: <p>This is pretty cool don't you think?</p>
+                }
+            })
+        } else {
+            this.setState(function (prevState) {
+                return {
+                    details: null
+                }
+            })
+        }
+    }
+
+    render () {
+        return (
+            <div>
+                <h1>Visibility Toggle 2.0</h1>
+                <button onClick={this.handleToggleVisibility}>
+                    {(!this.state.details) ? 'Show' : 'Hide'}
+                </button>
+                {this.state.details}
+            </div>
+        )
     }
 }
 
-const appRoot = document.querySelector('#app')
-function render () {
-    const page = (
-        <div>
-            <h1>Visibility Thing!</h1>
-            <button onClick={toggle}>{(!text) ? 'Show' : 'Hide'}</button>
-            {text}
-        </div>
-    )
-    ReactDOM.render(page, appRoot)
-}
-
-render()
+ReactDOM.render(<VisibilityToggle />, document.querySelector('#app'))
