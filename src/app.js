@@ -32,7 +32,7 @@ class IndecisionApp extends React.Component {
         if (!option) {
             return 'That value is not valid :('
         } else if (this.state.options.indexOf(option) > -1) {
-            return 'That already exists!'
+            return `"${option}" already exists!`
         }
 
         this.setState(function (prevState) {
@@ -67,53 +67,47 @@ class IndecisionApp extends React.Component {
     }
 }
 
-class Header extends React.Component {
-    render () {
-        return ( 
-            <div>
-                <h1>{this.props.title}</h1>
-                <h3>{this.props.subtitle}</h3>
-            </div>
-        )
-    }
+// This is a Stateless Functional Component
+// Basically a 'render-only' component
+function Header (props) {
+    return (
+        <div>
+            <h1>{props.title}</h1>
+            <h3>{props.subtitle}</h3>
+        </div>
+    )
 }
 
-class Action extends React.Component {
-    render () {
-        return (
-            <div>
-                <button onClick={this.props.handlePick} disabled={!this.props.hasOptions}>
-                    What should I do?
+function Action (props) {
+    return (
+        <div>
+            <button onClick={props.handlePick} disabled={!props.hasOptions}>
+                What should I do?
                 </button>
-            </div>
-        )
-    }
+        </div>
+    )
 }
 
-class Options extends React.Component {
-    render () {
-        return (
-            <div>
-                <button onClick={this.props.handleDeleteOptions}>Remove All</button>
-                {
-                    this.props.options.map(function (option) {
-                        return <Option key={option} optionText={option} />
-                    })
-                }
-                <Option />
-            </div>
-        )
-    }
+function Options (props) {
+    return (
+        <div>
+            <button onClick={props.handleDeleteOptions}>Remove All</button>
+            {
+                props.options.map(function (option) {
+                    return <Option key={option} optionText={option} />
+                })
+            }
+            <Option />
+        </div>
+    )
 }
 
-class Option extends React.Component {
-    render () {
-        return (
-            <div>
-                {this.props.optionText}
-            </div>
-        )
-    }
+function Option (props) {
+    return (
+        <div>
+            {props.optionText}
+        </div>
+    )
 }
 
 class AddOption extends React.Component {
