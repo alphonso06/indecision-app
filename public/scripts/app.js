@@ -19,6 +19,7 @@ var IndecisionApp = function (_React$Component) {
         _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this);
         _this.handlePick = _this.handlePick.bind(_this);
         _this.handleAddOption = _this.handleAddOption.bind(_this);
+        _this.handleDeleteSingleOption = _this.handleDeleteSingleOption(_this);
 
         // default prop state
         _this.state = {
@@ -32,10 +33,29 @@ var IndecisionApp = function (_React$Component) {
         value: function handleDeleteOptions() {
             // Empty the options array and re-render the result on the page
             this.setState(function () {
+                //--> was tasked to conver stuff like these to arrow shorthands, I hate arrow functions so no
                 return {
                     options: []
                 };
             });
+
+            console.log('this is handleDeleteOptions');
+        }
+    }, {
+        key: 'handleDeleteSingleOption',
+        value: function handleDeleteSingleOption(optionToRemove) {
+            // this.setState(function (prevState) {
+            //     return {
+            //         options: prevState.options.filter(function (option) {
+            //             return optionToRemove !== option
+            //         })
+            //     }
+            // })
+            console.log('handleDeleteSingleOption');
+
+            // this.setState((prevState) => ({
+            //     options: prevState.options.filter((option) => optionToRemove !== option)
+            // }))
         }
     }, {
         key: 'handlePick',
@@ -76,7 +96,8 @@ var IndecisionApp = function (_React$Component) {
                 }),
                 React.createElement(Options, {
                     options: this.state.options,
-                    handleDeleteOptions: this.handleDeleteOptions
+                    handleDeleteOptions: this.handleDeleteOptions,
+                    handleDeleteSingleOption: this.handleDeleteSingleOption
                 }),
                 React.createElement(AddOption, {
                     handleAddOption: this.handleAddOption
@@ -136,9 +157,12 @@ function Options(props) {
             'Remove All'
         ),
         props.options.map(function (option) {
-            return React.createElement(Option, { key: option, optionText: option });
-        }),
-        React.createElement(Option, null)
+            return React.createElement(Option, {
+                key: option,
+                optionText: option,
+                handleDeleteSingleOption: props.handleDeleteSingleOption
+            });
+        })
     );
 }
 
@@ -146,7 +170,14 @@ function Option(props) {
     return React.createElement(
         'div',
         null,
-        props.optionText
+        props.optionText,
+        React.createElement(
+            'button',
+            { onClick: function onClick(e) {
+                    props.handleDeleteSingleOption(props.optionText);
+                } },
+            'Remove'
+        )
     );
 }
 

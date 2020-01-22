@@ -4,6 +4,7 @@ class IndecisionApp extends React.Component {
         this.handleDeleteOptions = this.handleDeleteOptions.bind(this)
         this.handlePick = this.handlePick.bind(this)
         this.handleAddOption = this.handleAddOption.bind(this)
+        this.handleDeleteSingleOption = this.handleDeleteSingleOption(this)
 
         // default prop state
         this.state = {
@@ -18,6 +19,23 @@ class IndecisionApp extends React.Component {
                 options: []
             }
         })
+
+        console.log('this is handleDeleteOptions')
+    }
+
+    handleDeleteSingleOption (optionToRemove) {
+        // this.setState(function (prevState) {
+        //     return {
+        //         options: prevState.options.filter(function (option) {
+        //             return optionToRemove !== option
+        //         })
+        //     }
+        // })
+        console.log('handleDeleteSingleOption')
+
+        // this.setState((prevState) => ({
+        //     options: prevState.options.filter((option) => optionToRemove !== option)
+        // }))
     }
 
     handlePick () {
@@ -44,7 +62,7 @@ class IndecisionApp extends React.Component {
     }
 
     render () {
-        const subtitle = 'Your everyday big brain think machine'
+        const subtitle = 'A very interesting subtitle'
         return (
             <div>
                 <Header subtitle={subtitle} />
@@ -57,6 +75,7 @@ class IndecisionApp extends React.Component {
                 <Options 
                 options={this.state.options} 
                 handleDeleteOptions={this.handleDeleteOptions}
+                handleDeleteSingleOption={this.handleDeleteSingleOption}
                 />
 
                 <AddOption 
@@ -102,10 +121,13 @@ function Options (props) {
             <button onClick={props.handleDeleteOptions}>Remove All</button>
             {
                 props.options.map(function (option) {
-                    return <Option key={option} optionText={option} />
+                    return <Option 
+                    key={option} 
+                    optionText={option} 
+                    handleDeleteSingleOption={props.handleDeleteSingleOption}
+                    />
                 })
             }
-            <Option />
         </div>
     )
 }
@@ -114,6 +136,9 @@ function Option (props) {
     return (
         <div>
             {props.optionText}
+            <button onClick={(e) => {props.handleDeleteSingleOption(props.optionText)}}>
+             Remove
+             </button>
         </div>
     )
 }
