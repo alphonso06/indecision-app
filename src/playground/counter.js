@@ -5,8 +5,38 @@ class Counter extends React.Component {
         this.handleMinusOne = this.handleMinusOne.bind(this)
         this.handleReset = this.handleReset.bind(this)
         this.state = {
-            count: props.count
+            count: 0
         }
+    }
+
+    componentDidMount () {
+        try {
+            const json = localStorage.getItem('count')
+            const count = JSON.parse(json)
+
+            if (!isNaN(count)) {
+                this.setState(function () {
+                    return {
+                        count // return prop count
+                    }
+                })
+            }
+
+        } catch (e) {
+            // okay maybe print some error into the console
+            console.log('Unable to read value of count!')
+        }
+    }
+
+    componentDidUpdate (prevProps, prevState) {
+        if (prevState.count !== this.state.count) {
+            const json = JSON.stringify(this.state.count)
+            localStorage.setItem('count', json)
+        }
+    }
+
+    componentWillUnmount () {
+        console.log('component will be unmounted')
     }
 
     handleAddOne () {
@@ -43,10 +73,6 @@ class Counter extends React.Component {
             </div>
         )
     }
-}
-
-Counter.defaultProps = {
-    count: 0
 }
 
 ReactDOM.render(<Counter />, document.querySelector('#app'))

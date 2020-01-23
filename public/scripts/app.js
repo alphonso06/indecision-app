@@ -19,43 +19,66 @@ var IndecisionApp = function (_React$Component) {
         _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this);
         _this.handlePick = _this.handlePick.bind(_this);
         _this.handleAddOption = _this.handleAddOption.bind(_this);
-        _this.handleDeleteSingleOption = _this.handleDeleteSingleOption(_this);
+        _this.handleDeleteSingleOption = _this.handleDeleteSingleOption.bind(_this); //--> don't forget the 'bind' keyword!
 
         // default prop state
         _this.state = {
-            options: props.options
+            options: []
         };
         return _this;
     }
 
     _createClass(IndecisionApp, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            // catch any potential invalid json input values
+            try {
+                var json = localStorage.getItem('options');
+                var options = JSON.parse(json);
+
+                if (options) {
+                    this.setState(function () {
+                        return { options: options };
+                    });
+                }
+            } catch (e) {
+                // do nothing :D
+            }
+        }
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate(prevProps, prevState) {
+            // if the state of the array changes, store it in 'json'
+            if (prevState.options.length !== this.state.options.length) {
+                var json = JSON.stringify(this.state.options);
+                localStorage.setItem('options', json);
+            }
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            console.log('component will be unmounted');
+        }
+    }, {
         key: 'handleDeleteOptions',
         value: function handleDeleteOptions() {
             // Empty the options array and re-render the result on the page
             this.setState(function () {
-                //--> was tasked to conver stuff like these to arrow shorthands, I hate arrow functions so no
                 return {
                     options: []
                 };
             });
-
-            console.log('this is handleDeleteOptions');
         }
     }, {
         key: 'handleDeleteSingleOption',
         value: function handleDeleteSingleOption(optionToRemove) {
-            // this.setState(function (prevState) {
-            //     return {
-            //         options: prevState.options.filter(function (option) {
-            //             return optionToRemove !== option
-            //         })
-            //     }
-            // })
-            console.log('handleDeleteSingleOption');
-
-            // this.setState((prevState) => ({
-            //     options: prevState.options.filter((option) => optionToRemove !== option)
-            // }))
+            this.setState(function (prevState) {
+                return {
+                    options: prevState.options.filter(function (option) {
+                        return optionToRemove !== option;
+                    })
+                };
+            });
         }
     }, {
         key: 'handlePick',
@@ -85,7 +108,7 @@ var IndecisionApp = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var subtitle = 'Your everyday big brain think machine';
+            var subtitle = 'A very interesting subtitle';
             return React.createElement(
                 'div',
                 null,
@@ -109,12 +132,11 @@ var IndecisionApp = function (_React$Component) {
     return IndecisionApp;
 }(React.Component);
 
-IndecisionApp.defaultProps = {
-    options: []
+// This is a Stateless Functional Component
+// Basically a 'render-only' component
 
-    // This is a Stateless Functional Component
-    // Basically a 'render-only' component
-};function Header(props) {
+
+function Header(props) {
     return React.createElement(
         'div',
         null,
@@ -155,6 +177,11 @@ function Options(props) {
             'button',
             { onClick: props.handleDeleteOptions },
             'Remove All'
+        ),
+        props.options.length === 0 && React.createElement(
+            'p',
+            null,
+            'Please add option to start'
         ),
         props.options.map(function (option) {
             return React.createElement(Option, {
@@ -206,6 +233,10 @@ var AddOption = function (_React$Component2) {
             this.setState(function () {
                 return { error: error };
             });
+
+            if (!error) {
+                e.target.elements.option.value = '';
+            }
         }
     }, {
         key: 'render',
