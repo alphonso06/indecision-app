@@ -3,17 +3,54 @@ import Header from './Header'
 import Action from './Action'
 import AddOption from './AddOption'
 import Options from './Options'
-import autobind from 'class-autobind'
 
 export default class IndecisionApp extends React.Component {
-    constructor(props) {
-        super(props)
-        autobind(this) //--> automatically fixes the 'this' binding for all methods
-        
-        // default prop state
-        this.state = {
-            options: []
+    state = {
+        options: []
+    }
+
+    // this is now a class property
+    // yes it's an arrow function, deal with it mr. author
+    handleDeleteOptions = () => {
+        // Empty the options array and re-render the result on the page
+        this.setState(function () {
+            return {
+                options: []
+            }
+        })
+    }
+
+    handleDeleteSingleOption = (optionToRemove) => {
+        this.setState(function (prevState) {
+            return {
+                options: prevState.options.filter(function (option) {
+                    return optionToRemove !== option
+                })
+            }
+        })
+    }
+
+    handlePick = () => {
+        // This is basically the RNG
+        const numberOfOptions = this.state.options.length
+        const randomNum = Math.floor(Math.random() * numberOfOptions)
+        const option = this.state.options[randomNum]
+
+        alert(`You should ${option}`)
+    }
+
+    handleAddOption = (option) => {
+        if (!option) {
+            return 'That value is not valid :('
+        } else if (this.state.options.indexOf(option) > -1) {
+            return `"${option}" already exists!`
         }
+
+        this.setState(function (prevState) {
+            return {
+                options: prevState.options.concat([option]) //--> Combines two arrays into a new array
+            }
+        })
     }
 
     componentDidMount() {
@@ -40,48 +77,6 @@ export default class IndecisionApp extends React.Component {
 
     componentWillUnmount() {
         console.log('component will be unmounted')
-    }
-
-    handleDeleteOptions() {
-        // Empty the options array and re-render the result on the page
-        this.setState(function () {
-            return {
-                options: []
-            }
-        })
-    }
-
-    handleDeleteSingleOption(optionToRemove) {
-        this.setState(function (prevState) {
-            return {
-                options: prevState.options.filter(function (option) {
-                    return optionToRemove !== option
-                })
-            }
-        })
-    }
-
-    handlePick() {
-        // This is basically the RNG
-        const numberOfOptions = this.state.options.length
-        const randomNum = Math.floor(Math.random() * numberOfOptions)
-        const option = this.state.options[randomNum]
-
-        alert(`You should ${option}`)
-    }
-
-    handleAddOption(option) {
-        if (!option) {
-            return 'That value is not valid :('
-        } else if (this.state.options.indexOf(option) > -1) {
-            return `"${option}" already exists!`
-        }
-
-        this.setState(function (prevState) {
-            return {
-                options: prevState.options.concat([option]) //--> Combines two arrays into a new array
-            }
-        })
     }
 
     render() {
