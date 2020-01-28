@@ -1,0 +1,25 @@
+.header {
+    background-color: $cool-dark;
+    color: $text-common;
+    margin-bottom: $xlarge-size;
+    padding: $medium-size 0;
+}
+
+// Block Element Modifier (BEM)
+.header__title {
+    font-size: $large-size;
+    margin: 0;
+}
+
+.header__subtitle {
+    color: $dark-white;
+    font-size: $medium-size;
+    font-weight: 500;
+    margin: 0;
+}
+
+@media (max-width: $desktop-breakpoint) {
+    .header {
+        margin-bottom: $medium-size;
+    }
+}

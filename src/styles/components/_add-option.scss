@@ -1,0 +1,36 @@
+// Add Option
+.add-option {
+    display: flex;
+    flex-direction: column;
+    padding: $medium-size;
+}
+
+.add-option__input {
+    flex-grow: 1;
+    background-color: $dark-blue;
+    border: none;
+    border-bottom: .3rem solid darken($dark-blue, 10%);
+    border-radius: 3px;
+    margin-right: $small-size;
+    color: $text-common;
+    padding: $small-size;
+    margin: 0 0 $small-size 0;
+}
+
+// Errors
+.add-option-error {
+    color: $dark-white;
+    font-style: italic;
+    padding: 0 $medium-size;
+    margin: $medium-size 0 0 0;
+}
+
+@media (max-wdith: $desktop-breakpoint) {
+    .add-option {
+        flex-direction: row;
+    }
+
+    .add-option__input {
+        margin: 0 $small-size 0 0;
+    }
+}

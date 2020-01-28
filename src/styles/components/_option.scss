@@ -1,0 +1,14 @@
+.option {
+    border-bottom: 1px solid lighten($widget-body-background, 10%);
+    display: flex;
+    justify-content: space-between;
+    padding: $large-size $medium-size;
+}
+
+.option__text {
+    color: $text-common;
+    font-weight: 500;
+    font-size: $medium-size;
+    margin: 0;
+    word-break: break-all;
+}

@@ -3,10 +3,12 @@ import Header from './Header'
 import Action from './Action'
 import AddOption from './AddOption'
 import Options from './Options'
+import OptionModal from './OptionModal'
 
 export default class IndecisionApp extends React.Component {
     state = {
-        options: []
+        options: [],
+        selectedOption: undefined
     }
 
     // this is now a class property
@@ -36,7 +38,21 @@ export default class IndecisionApp extends React.Component {
         const randomNum = Math.floor(Math.random() * numberOfOptions)
         const option = this.state.options[randomNum]
 
-        alert(`You should ${option}`)
+        this.setState(function (prevState) {
+            return {
+                selectedOption: option
+            }
+        })
+    }
+
+    handleCloseModal = () => {
+        // Clears the selectedOption state back to default or undefined
+        // This will have the expected and desired side-effect of closing the modal
+        this.setState(function (prevState) {
+            return {
+                selectedOption: undefined
+            }
+        })
     }
 
     handleAddOption = (option) => {
@@ -85,19 +101,29 @@ export default class IndecisionApp extends React.Component {
             <div>
                 <Header subtitle={subtitle} />
 
-                <Action
-                    hasOptions={this.state.options.length > 0}
-                    handlePick={this.handlePick}
-                />
+                    <div className="container">
+                        <Action
+                            hasOptions={this.state.options.length > 0}
+                            handlePick={this.handlePick}
+                        />
+                        
+                        <div className="widget">
+                            <Options
+                                options={this.state.options}
+                                handleDeleteOptions={this.handleDeleteOptions}
+                                handleDeleteSingleOption={this.handleDeleteSingleOption}
+                            />
 
-                <Options
-                    options={this.state.options}
-                    handleDeleteOptions={this.handleDeleteOptions}
-                    handleDeleteSingleOption={this.handleDeleteSingleOption}
-                />
+                            <AddOption
+                                handleAddOption={this.handleAddOption}
+                            />
+                        </div>
 
-                <AddOption
-                    handleAddOption={this.handleAddOption}
+                    </div>
+
+                <OptionModal
+                    selectedOption={this.state.selectedOption}
+                    handleCloseModal={this.handleCloseModal}
                 />
             </div>
         )
